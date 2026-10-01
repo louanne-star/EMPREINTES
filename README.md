@@ -52,8 +52,6 @@ Si un modèle manque, l'app dessine une version provisoire en code.
 - Communs (haut de js/game.js) : inertie, virages, tolérance de capture, lissage du suivi.
 
 ## À savoir
-- targets/fresques.mind contient, dans l'ordre : tortue-source.jpg, hibiscus.jpg.
-- tortue-source.jpg vient du dossier de Kuby (basse résolution) : pour le vrai mur,
-  la remplacer par une photo nette et de face, puis recompiler fresques.mind.
+- targets/fresques.mind contient, dans l'ordre : tortue.jpg, hibiscus.jpg.
 - L'Atlas est enregistré dans le navigateur du téléphone (localStorage) pour le prototype.
 - Pour remettre l'Atlas à zéro : dans la console, localStorage.removeItem('empreintes.atlas.v1')

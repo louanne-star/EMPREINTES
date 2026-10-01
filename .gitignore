@@ -3,3 +3,4 @@
 .DS_Store
 /fresque *.webp
 node_modules/
+/targets/*.webp

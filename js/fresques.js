@@ -6,15 +6,16 @@
 //
 // Repère d'une fresque : largeur 1, centre en (0, 0), x vers la droite, y vers le
 // haut, z vers le visiteur. Hauteur = hauteur / largeur de la photo.
-// Contenu actuel : 0 = tortue-source.jpg, 1 = hibiscus.jpg
+// Contenu attendu : 0 = tortue.jpg, 1 = hibiscus.jpg
 export const TARGETS_FILE = './targets/fresques.mind';
 
 export const FRESQUES = [
   {
+    // Les Architectes du Récif, photo : targets/tortue.jpg (hauteur 0,388)
     id: 'tortue',
     targetIndex: 0,
     empreinte: 'carapace',              // voir js/empreintes.js
-    spawn: [-0.2, 0.03],                // où le personnage sort de la peinture
+    spawn: [-0.22, 0.03],               // où le personnage sort de la peinture (la carapace)
     heading: 0,                         // direction de départ (0 = vers la droite)
     bounds: { x: 0.6, y: 0.3 },         // zone de déplacement
     geluleZone: { x: 0.45, y: 0.17 },   // zone où la gélule peut apparaître
