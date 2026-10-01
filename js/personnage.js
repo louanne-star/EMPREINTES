@@ -104,13 +104,17 @@ async function loadModel(cfg) {
 // d'abord l'aile se déplie sur le côté (autour de l'axe du dos), puis elle bat
 // (autour de l'axe du corps). Coordonnées dans le repère du modèle.
 // w = { mesh, pivot: épaule gauche, spine: axe queue → tête, back: axe ventre → dos,
-//       spread: ouverture (rad), amp: amplitude du battement (rad), freq: battements (rad/s) }
+//       spread: ouverture (rad), amp: amplitude du battement (rad), freq: battements (rad/s),
+//       weight: nom d'un attribut de sommet de 0 (corps) à 1 (aile), pour un modèle où les
+//       ailes sont soudées au corps (sinon tout le maillage `mesh` est considéré comme aile) }
 function setupWings(model, w) {
-  const mesh = model.getObjectByName(w.mesh);
+  let mesh = w.mesh ? model.getObjectByName(w.mesh) : null;
+  if (!w.mesh) model.traverse((o) => { if (!mesh && o.isMesh) mesh = o; });
   if (!mesh) {
     console.warn(`Ailes « ${w.mesh} » introuvables dans le modèle.`);
     return null;
   }
+  const k = w.weight ?? '1.0';
   const uniforms = {
     uPivot: { value: new THREE.Vector3(...w.pivot) },
     uSpine: { value: new THREE.Vector3(...w.spine).normalize() },
@@ -125,21 +129,22 @@ function setupWings(model, w) {
       .replace('#include <common>', `#include <common>
         uniform vec3 uPivot, uSpine, uBack;
         uniform float uSpread, uFlap;
+        ${w.weight ? `attribute float ${w.weight};` : ''}
         vec3 rotAxis(vec3 v, vec3 k, float a) {
           float c = cos(a), s = sin(a);
           return v * c + cross(k, v) * s + k * dot(k, v) * (1.0 - c);
         }
-        vec3 wingTurn(vec3 v, float side) {
-          v = rotAxis(v, uBack, -side * uSpread);
-          return rotAxis(v, uSpine, side * uFlap);
+        vec3 wingTurn(vec3 v, float side, float k) {
+          v = rotAxis(v, uBack, -side * uSpread * k);
+          return rotAxis(v, uSpine, side * uFlap * k);
         }`)
       .replace('#include <beginnormal_vertex>', `#include <beginnormal_vertex>
-        objectNormal = wingTurn(objectNormal, sign(position.x));`)
+        objectNormal = wingTurn(objectNormal, sign(position.x), ${k});`)
       .replace('#include <begin_vertex>', `#include <begin_vertex>
         {
           float side = sign(position.x);
           vec3 pivot = vec3(uPivot.x * side, uPivot.yz);
-          transformed = wingTurn(transformed - pivot, side) + pivot;
+          transformed = wingTurn(transformed - pivot, side, ${k}) + pivot;
         }`);
   };
   mat.customProgramCacheKey = () => 'ailes';

@@ -74,6 +74,43 @@ export const FRESQUES = [
     },
   },
 
-  // Le Langage des Plumes (loriquet) : targetIndex 2 dans fresques.mind,
-  // en attente du nouveau modèle 3D.
+  {
+    // Le Langage des Plumes (loriquet), photo : targets/loriquet.jpg (hauteur 0,894).
+    // L'oiseau sort du loriquet peint, au centre-gauche, tourné vers la droite.
+    id: 'loriquet',
+    targetIndex: 2,
+    empreinte: 'plume',
+    spawn: [-0.07, 0.15],
+    heading: 0,
+    bounds: { x: 0.6, y: 0.5 },
+    geluleZone: { x: 0.42, y: 0.36 },
+    depth: [0.08, 0.45],
+    speed: 0.36,
+
+    personnage: {
+      // « Australian Rainbow Lorikeet » (fichier 12242), converti depuis l'OBJ par
+      // outils/preparer-loriquet.mjs : couleurs provisoires par zone + carte des ailes.
+      model: './models/loriquet.glb',
+      length: 0.45,
+      // Modèle « Z vers le haut », tête vers +Y, oiseau posé penché à 45°
+      rotation: [0, Math.PI / 4, -Math.PI / 2],
+      tilt34: 0.3,
+      pitch: -0.1,
+      bob: 0.02,
+      wings: {
+        weight: '_wing',                // ailes soudées au corps : poids par sommet (0 corps, 1 aile)
+        pivot: [6, -5.65, 14.38],       // épaule gauche
+        spine: [0, 1, 1],
+        back: [0, -1, 1],
+        spread: 1.3,                    // ailes déployées sur le côté
+        amp: 0.5,                       // amplitude du battement
+        freq: 18,                       // vitesse du battement
+      },
+    },
+
+    molecule: {
+      model: './models/molecule.glb',
+      size: 0.09,
+    },
+  },
 ];
