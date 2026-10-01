@@ -69,7 +69,9 @@ function onCaught(empreinte) {
 }
 
 function updateAtlasCount() {
-  $('#atlas-count').textContent = `${atlas.count()}/${atlas.total()}`;
+  const score = `${atlas.count()}/${atlas.total()}`;
+  $('#atlas-count').textContent = score;
+  $('#accueil-atlas').textContent = `Mon Atlas · ${score}`;
 }
 
 // --- Interface ---
@@ -98,15 +100,40 @@ $('#atlas-btn').addEventListener('click', openAtlas);
 $('#reveal-atlas').addEventListener('click', () => { $('#reveal').hidden = true; openAtlas(); });
 $('#atlas-close').addEventListener('click', () => { $('#atlas').hidden = true; });
 
+$('#accueil-atlas').addEventListener('click', openAtlas);
+
+// Le bouton « ? » rouvre la page d'accueil ; l'expérience continue derrière
+$('#aide-btn').addEventListener('click', () => { $('#accueil').hidden = false; });
+
+let started = false;
 $('#start').addEventListener('click', async () => {
   const btn = $('#start');
+  if (started) {
+    $('#accueil').hidden = true;
+    return;
+  }
   btn.disabled = true;
   btn.textContent = 'Chargement…';
+  $('#accueil-erreur').hidden = true;
 
-  await Promise.all(games.map((g) => g.load()));
-  await mindarThree.start();
-  btn.hidden = true;
-  $('#hint').hidden = false;
+  try {
+    await Promise.all(games.map((g) => g.load()));
+    await mindarThree.start();
+  } catch (err) {
+    console.error(err);
+    $('#accueil-erreur').textContent =
+      "Impossible d'ouvrir la caméra. Vérifie que tu as autorisé son accès, puis réessaie.";
+    $('#accueil-erreur').hidden = false;
+    btn.disabled = false;
+    btn.textContent = "Commencer l'exploration";
+    return;
+  }
+
+  started = true;
+  btn.disabled = false;
+  btn.textContent = "Reprendre l'exploration";
+  $('#accueil').hidden = true;
+  $('#hint').hidden = active !== null;
 
   const clock = new THREE.Clock();
   renderer.setAnimationLoop(() => {
