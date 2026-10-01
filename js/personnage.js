@@ -1,40 +1,26 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-// Modèle « Turtle » par 1674143 sur Sketchfab, licence CC-BY 4.0 (crédit obligatoire).
-// Sans ce fichier, une tortue provisoire est dessinée en code.
-export const MODEL_URL = './models/turtle.glb';
+const MAX_BANK = 0.2; // roulis maximal dans les virages
+const MAX_NOSE = 0.4; // tête qui pique vers le visiteur ou vers le mur pendant les vagues
 
-// Longueur de la tortue, en largeurs de fresque (1 = toute la fresque).
-const LENGTH = 0.42;
-
-// Orientation du modèle : on veut le dos face à la caméra et la tête vers la droite.
-// Réglage par défaut pour un .glb standard (haut = +Y, avant = +Z).
-// Si ta tortue arrive de travers, c'est ces angles qu'il faut changer.
-const MODEL_ROTATION = new THREE.Euler(Math.PI / 2, Math.PI / 2, 0, 'XYZ');
-
-// Vue de trois quarts comme la tortue peinte : la carapace bascule vers le haut de
-// l'écran et on voit son flanc. TILT_34 = angle de bascule (0 = vue de dos, 1.57 = profil).
-const TILT_34 = 0.75;
-const TILT_PITCH = -0.15; // relève un peu la tête vers la caméra
-const MAX_BANK = 0.2;     // roulis maximal dans les virages
-const MAX_NOSE = 0.4;     // tête qui pique vers le visiteur ou vers le mur pendant les vagues
-
-// Renvoie { root, update(dt, effort, turn, heading, climb) } : root se place et s'oriente dans le
-// plan de la fresque (tête vers +X, dos vers +Z). effort va de 0 (immobile) à 1 (pleine nage),
-// turn est la vitesse de virage en rad/s (positive = vers la gauche), heading l'orientation
-// actuelle (sert à garder le dos tourné vers le haut de l'écran).
-export async function createTortue() {
+// Personnage jouable d'une fresque, réglé par `cfg` (voir js/fresques.js).
+// Renvoie { root, update(dt, effort, turn, heading, climb) } : root se place et s'oriente
+// dans le plan de la fresque (tête vers +X, dos vers +Z). effort va de 0 (immobile) à 1
+// (pleine vitesse), turn est la vitesse de virage en rad/s (positive = vers la gauche),
+// heading l'orientation actuelle, climb > 0 quand il vient vers le visiteur.
+// Si le modèle est introuvable, une tortue provisoire est dessinée en code.
+export async function createPersonnage(cfg) {
   try {
-    return await loadModel();
+    return await loadModel(cfg);
   } catch (err) {
-    console.info('Pas de modèle 3D trouvé, tortue provisoire utilisée.', err?.message ?? '');
-    return createPlaceholder();
+    console.info(`Modèle ${cfg.model} introuvable, personnage provisoire utilisé.`, err?.message ?? '');
+    return createPlaceholder(cfg);
   }
 }
 
-// Mouvements du corps communs aux deux tortues : inclinaison, roulis, ondulation.
-function createPose(body) {
+// Mouvements du corps communs à tous les personnages : inclinaison, roulis, ondulation.
+function createPose(body, cfg) {
   let t = 0;
   let bank = 0;
   let effortSmooth = 0;
@@ -44,18 +30,18 @@ function createPose(body) {
     t += dt * (1.2 + effortSmooth * 2.2);
     const targetBank = THREE.MathUtils.clamp(-turn * 0.12, -MAX_BANK, MAX_BANK);
     bank += (targetBank - bank) * (1 - Math.exp(-dt * 3));
-    // Tête vers le visiteur quand elle s'approche, vers le mur quand elle s'éloigne
+    // Tête vers le visiteur quand il s'approche, vers le mur quand il s'éloigne
     const targetNose = THREE.MathUtils.clamp(-climb * 0.5, -MAX_NOSE, MAX_NOSE);
     nose += (targetNose - nose) * (1 - Math.exp(-dt * 3));
 
     // Vers la droite : bascule d'un côté ; vers la gauche : de l'autre ;
     // vers le haut ou le bas : vue de dos. Le dos reste ainsi toujours vers le haut.
-    const tilt = -TILT_34 * Math.cos(heading);
+    const tilt = -cfg.tilt34 * Math.cos(heading);
 
     const stroke = Math.sin(t);
     body.rotation.set(
       tilt + bank + Math.sin(t * 0.5) * 0.04,
-      TILT_PITCH + nose + stroke * (0.05 + effortSmooth * 0.1) - effortSmooth * 0.1,
+      cfg.pitch + nose + stroke * (0.05 + effortSmooth * 0.1) - effortSmooth * 0.1,
       Math.sin(t * 0.7) * 0.06,
     );
     body.position.z = Math.sin(t + 0.6) * 0.008;
@@ -63,8 +49,8 @@ function createPose(body) {
   };
 }
 
-async function loadModel() {
-  const gltf = await new GLTFLoader().loadAsync(MODEL_URL);
+async function loadModel(cfg) {
+  const gltf = await new GLTFLoader().loadAsync(cfg.model);
   const model = gltf.scene;
 
   // Modèle à squelette : sa boîte englobante bouge avec l'animation, on évite
@@ -80,21 +66,21 @@ async function loadModel() {
   model.position.sub(center);
 
   const fit = new THREE.Group();
-  fit.scale.setScalar(LENGTH / Math.max(size.x, size.y, size.z));
-  fit.rotation.copy(MODEL_ROTATION);
+  fit.scale.setScalar(cfg.length / Math.max(size.x, size.y, size.z));
+  fit.rotation.set(...cfg.rotation, 'XYZ');
   fit.add(model);
 
   const root = new THREE.Group();
   const body = new THREE.Group();
   body.add(fit);
   root.add(body);
-  const pose = createPose(body);
+  const pose = createPose(body, cfg);
 
-  // Joue l'animation de nage du modèle s'il en a une
+  // Joue l'animation du modèle s'il en a une
   let mixer = null;
   if (gltf.animations.length) {
     mixer = new THREE.AnimationMixer(model);
-    const clip = gltf.animations.find((c) => /swim|nage/i.test(c.name)) ?? gltf.animations[0];
+    const clip = gltf.animations.find((c) => cfg.clip?.test(c.name)) ?? gltf.animations[0];
     mixer.clipAction(clip).play();
   }
 
@@ -110,11 +96,12 @@ async function loadModel() {
   };
 }
 
-function createPlaceholder() {
+function createPlaceholder(cfg) {
   const root = new THREE.Group();
   const body = new THREE.Group();
+  body.scale.setScalar(cfg.length / 0.24); // dessiné pour une longueur de 0.24
   root.add(body);
-  const pose = createPose(body);
+  const pose = createPose(body, cfg);
 
   const shellMat = new THREE.MeshStandardMaterial({ color: 0x6b5a2e, roughness: 0.6 });
   const skinMat = new THREE.MeshStandardMaterial({ color: 0x8a9a5b, roughness: 0.8 });

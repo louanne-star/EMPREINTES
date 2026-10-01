@@ -1,10 +1,6 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
-// Modèle « Water Molecule ball-and-stick model » par borkia sur Sketchfab,
-// licence CC-BY-SA 4.0 (crédit obligatoire). Sans ce fichier : gélule dessinée en code.
-const MODEL_URL = './models/molecule.glb';
-const SIZE = 0.09; // en largeurs de fresque
 const HOVER_Z = 0.08;
 
 function haloTexture() {
@@ -20,21 +16,22 @@ function haloTexture() {
   return new THREE.CanvasTexture(c);
 }
 
-async function loadModel() {
-  const gltf = await new GLTFLoader().loadAsync(MODEL_URL);
+async function loadModel(cfg) {
+  const gltf = await new GLTFLoader().loadAsync(cfg.model);
   const model = gltf.scene;
   model.updateMatrixWorld(true);
   const box = new THREE.Box3().setFromObject(model);
   const size = box.getSize(new THREE.Vector3());
   model.position.sub(box.getCenter(new THREE.Vector3()));
   const fit = new THREE.Group();
-  fit.scale.setScalar(SIZE / Math.max(size.x, size.y, size.z));
+  fit.scale.setScalar(cfg.size / Math.max(size.x, size.y, size.z));
   fit.add(model);
   return fit;
 }
 
-function createCapsule(color) {
+function createCapsule(color, cfg) {
   const capsule = new THREE.Group();
+  capsule.scale.setScalar(cfg.size / 0.062); // dessinée pour une taille de 0.062
   const geo = new THREE.CapsuleGeometry(0.016, 0.03, 8, 16);
   const tint = new THREE.MeshStandardMaterial({
     color, emissive: color, emissiveIntensity: 0.35, metalness: 0.3, roughness: 0.25,
@@ -54,15 +51,17 @@ function createCapsule(color) {
 
 // L'Empreinte : la molécule qui tourne sur elle-même, entourée d'un halo.
 // Elle reste à sa place : c'est au joueur d'aller la chercher.
-export async function createGelule(color) {
+// cfg = { model, size } (voir js/fresques.js) ; sans modèle : gélule dessinée en code.
+export async function createGelule(color, cfg) {
   const root = new THREE.Group();
   let shape;
   try {
-    shape = await loadModel();
+    shape = await loadModel(cfg);
   } catch (err) {
-    console.info('Pas de modèle de molécule trouvé, gélule dessinée en code.', err?.message ?? '');
-    shape = createCapsule(color);
+    console.info(`Molécule ${cfg.model} introuvable, gélule dessinée en code.`, err?.message ?? '');
+    shape = createCapsule(color, cfg);
   }
+  const haloSize = cfg.size * 1.7;
   const spinner = new THREE.Group();
   spinner.add(shape);
   root.add(spinner);
@@ -83,7 +82,7 @@ export async function createGelule(color) {
       spinner.rotation.y += dt * (1.2 + excite * 10);
       spinner.rotation.x = Math.sin(t * 0.8) * 0.4;
       root.position.z = this.depth + Math.sin(t * 2) * 0.008 + excite * 0.12;
-      halo.scale.setScalar(0.15 + Math.sin(t * 3) * 0.02 + excite * 0.12);
+      halo.scale.setScalar(haloSize * (1 + Math.sin(t * 3) * 0.13 + excite * 0.8));
     },
   };
 }
