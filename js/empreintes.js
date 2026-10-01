@@ -1,10 +1,12 @@
 // Les 5 Empreintes du parcours (contenu issu de la fiche projet).
 // disponible : la fresque existe sur le campus (compte pour compléter l'Atlas).
+// vignette : photo de la fresque (cartes de l'accueil et de l'Atlas).
 // audio : fichier MP3 joué par le bouton « Écouter » (sinon voix du téléphone).
 // dessin : formule de la molécule, générée depuis sa notation SMILES (voir molecules/).
 export const EMPREINTES = [
   {
     id: 'carapace',
+    vignette: './images/carte-tortue.jpg',
     disponible: true,
     dessin: './molecules/carapace.svg',
     legende: "Cystine : deux acides aminés de la kératine reliés par un pont soufre (S–S). Ces ponts rendent la carapace dure et résistante.",
@@ -20,6 +22,7 @@ export const EMPREINTES = [
   },
   {
     id: 'petale',
+    vignette: './images/carte-hibiscus.jpg',
     disponible: true,
     dessin: './molecules/petale.svg',
     legende: "Cyanidine : le pigment rouge-pourpre de l'hibiscus, la même formule que celle peinte sur la fresque.",
@@ -35,6 +38,7 @@ export const EMPREINTES = [
   },
   {
     id: 'plume',
+    vignette: './images/carte-loriquet.jpg',
     disponible: true,
     dessin: './molecules/plume.svg',
     legende: "DHICA : une des briques qui s'assemblent pour former la mélanine des plumes.",

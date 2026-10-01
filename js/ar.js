@@ -3,9 +3,9 @@ import { MindARThree } from 'mindar-image-three';
 import { FRESQUES, TARGETS_FILE } from './fresques.js';
 import { createGame } from './game.js';
 import { createControls } from './controls.js';
-import { atlas, renderAtlas, renderFinal } from './atlas.js';
+import { atlas, renderAtlas, renderFinal, renderCartes } from './atlas.js';
 import { voix, verifierFichiers } from './voix.js';
-import { EMPREINTES } from './empreintes.js';
+import { EMPREINTES, getEmpreinte } from './empreintes.js';
 
 const $ = (sel) => document.querySelector(sel);
 
@@ -49,8 +49,11 @@ function tick(dt) {
 function onCaught(empreinte) {
   const isNew = atlas.add(empreinte.id);
   updateAtlasCount();
+  $('#reveal-lieu').textContent = empreinte.fresque;
   $('#reveal-title').textContent = empreinte.nom;
-  $('#reveal-molecule').textContent = `${empreinte.molecule} · ${empreinte.fonction}`;
+  $('#reveal-molecule').textContent = empreinte.molecule;
+  $('#reveal-fonction').textContent = empreinte.fonction;
+  $('#reveal-score').textContent = atlas.score();
   $('#reveal-voix').textContent = `« ${empreinte.voix} »`;
   $('#reveal-fait').textContent = empreinte.fait;
   $('#reveal-status').textContent = isNew ? 'Nouvelle Empreinte sauvegardée dans ton Atlas' : 'Déjà dans ton Atlas';
@@ -72,9 +75,10 @@ function onCaught(empreinte) {
 }
 
 function updateAtlasCount() {
-  const score = `${atlas.count()}/${atlas.total()}`;
-  $('#atlas-count').textContent = score;
-  $('#accueil-atlas').textContent = `Mon Atlas · ${score}`;
+  $('#atlas-count').textContent = atlas.score();
+  $('#accueil-score').textContent = atlas.score();
+  $('#nb-fresques').textContent = `${atlas.total()} sur le campus`;
+  renderCartes($('#cartes'));
 }
 
 // --- Interface ---
@@ -97,17 +101,34 @@ $('#replay').addEventListener('click', () => {
 });
 
 const openAtlas = () => {
-  renderAtlas($('#atlas-list'), $('#atlas-footer'), $('#atlas-final'));
+  renderAtlas($('#atlas-list'), $('#atlas-stats'), $('#atlas-final'));
   $('#atlas').scrollTop = 0;
   $('#atlas').hidden = false;
 };
 $('#atlas-btn').addEventListener('click', openAtlas);
 $('#reveal-atlas').addEventListener('click', () => { voix.arreter(); $('#reveal').hidden = true; openAtlas(); });
-$('#atlas-close').addEventListener('click', () => { $('#atlas').hidden = true; });
+$('#atlas-close').addEventListener('click', () => { voix.arreter(); $('#atlas').hidden = true; });
+
+// « Écouter » sur chaque fiche de l'Atlas
+$('#atlas-list').addEventListener('click', (e) => {
+  const btn = e.target.closest('[data-ecouter]');
+  if (!btn) return;
+  const enCoursIci = btn.textContent.startsWith('⏹');
+  voix.arreter();
+  if (enCoursIci) return;
+  btn.textContent = '⏹ Arrêter';
+  voix.jouer(getEmpreinte(btn.dataset.ecouter), () => { btn.textContent = ECOUTER; });
+});
+
+// Écran de bienvenue → accueil
+$('#splash-go').addEventListener('click', () => {
+  $('#splash').hidden = true;
+  $('#accueil').hidden = false;
+});
 
 $('#accueil-atlas').addEventListener('click', openAtlas);
 
-// Le bouton « ? » rouvre la page d'accueil ; l'expérience continue derrière
+// Le bouton « maison » rouvre la page d'accueil ; l'expérience continue derrière
 $('#aide-btn').addEventListener('click', () => { $('#accueil').hidden = false; });
 
 let started = false;
@@ -118,7 +139,8 @@ $('#start').addEventListener('click', async () => {
     return;
   }
   btn.disabled = true;
-  btn.textContent = 'Chargement…';
+  btn.classList.add('charge');
+  $('#start-label').textContent = 'Chargement…';
   $('#accueil-erreur').hidden = true;
 
   try {
@@ -130,13 +152,15 @@ $('#start').addEventListener('click', async () => {
       "Impossible d'ouvrir la caméra. Vérifie que tu as autorisé son accès, puis réessaie.";
     $('#accueil-erreur').hidden = false;
     btn.disabled = false;
-    btn.textContent = "Commencer l'exploration";
+    btn.classList.remove('charge');
+    $('#start-label').textContent = "Commencer l'exploration";
     return;
   }
 
   started = true;
   btn.disabled = false;
-  btn.textContent = "Reprendre l'exploration";
+  btn.classList.remove('charge');
+  $('#start-label').textContent = "Reprendre l'exploration";
   $('#accueil').hidden = true;
   $('#hint').hidden = active !== null;
 

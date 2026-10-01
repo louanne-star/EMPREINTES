@@ -21,6 +21,7 @@ export const atlas = {
   count: () => disponibles.filter((e) => collected.includes(e.id)).length,
   total: () => disponibles.length,
   complete: () => atlas.count() === atlas.total(),
+  score: () => `${atlas.count()}/${atlas.total()}`,
   // Renvoie true si l'Empreinte est nouvelle
   add(id) {
     if (collected.includes(id)) return false;
@@ -30,38 +31,56 @@ export const atlas = {
   },
 };
 
-const hex = (n) => '#' + n.toString(16).padStart(6, '0');
+// Cartes photo des fresques sur l'accueil
+export function renderCartes(el) {
+  el.innerHTML = disponibles.map((e) => `
+    <article class="carte">
+      <img src="${e.vignette}" alt="Fresque ${e.fresque}" loading="lazy">
+      <div class="carte-info">
+        ${atlas.has(e.id) ? '<em class="badge">✓ Trouvée</em>' : ''}
+        <strong>${e.fresque}</strong>
+        <span>${capitale(e.personnage)} · ${e.molecule}</span>
+      </div>
+    </article>`).join('');
+}
 
-function slot(e) {
+const capitale = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+
+function fiche(e) {
   if (!e.disponible) {
     return `
-      <li class="slot soon">
-        <span class="capsule" style="--c:#555"></span>
-        <div><strong>Fresque à venir</strong><small>${e.fresque}</small></div>
+      <li class="fiche soon">
+        <strong>Fresque à venir</strong>
+        ${e.fresque} · ${capitale(e.personnage)}
       </li>`;
   }
-  if (!atlas.has(e.id)) {
-    return `
-      <li class="slot locked">
-        <span class="capsule" style="--c:#555"></span>
-        <div><strong>???</strong><small>${e.fresque} · à trouver</small></div>
-      </li>`;
-  }
+  const photo = `
+    <div class="fiche-photo">
+      <img src="${e.vignette}" alt="" loading="lazy">
+      <div><strong>${atlas.has(e.id) ? e.nom : 'À trouver'}</strong><span>${e.fresque}</span></div>
+    </div>`;
+  if (!atlas.has(e.id)) return `<li class="fiche locked">${photo}</li>`;
   return `
-    <li class="slot ok">
-      <span class="capsule" style="--c:${hex(e.couleur)}"></span>
-      <div>
-        <strong>${e.nom}</strong>
-        <small>${e.fresque} · ${e.molecule} · ${e.fonction}</small>
-        ${e.dessin ? `<figure class="dessin"><img src="${e.dessin}" alt="Formule : ${e.molecule}"><figcaption>${e.legende}</figcaption></figure>` : ''}
-        <p>« ${e.voix} »</p>
+    <li class="fiche">
+      ${photo}
+      <div class="stats">
+        <div><span>Molécule</span><strong>${e.molecule}</strong></div>
+        <div><span>Fonction</span><strong>${e.fonction}</strong></div>
+        <div><span>Espèce</span><strong>${capitale(e.personnage.replace(/^(le|la|l')\s?/i, ''))}</strong></div>
       </div>
+      ${e.dessin ? `<figure class="dessin"><img src="${e.dessin}" alt="Formule : ${e.molecule}"><figcaption>${e.legende}</figcaption></figure>` : ''}
+      <p class="voix">« ${e.voix} »</p>
+      <button class="pilule" data-ecouter="${e.id}">🔊 Écouter</button>
     </li>`;
 }
 
-export function renderAtlas(listEl, footerEl, finalEl) {
-  listEl.innerHTML = EMPREINTES.map(slot).join('');
-  footerEl.textContent = `${atlas.count()} / ${atlas.total()} Empreintes collectées`;
+export function renderAtlas(listEl, statsEl, finalEl) {
+  listEl.innerHTML = EMPREINTES.map(fiche).join('');
+  const aVenir = EMPREINTES.length - disponibles.length;
+  statsEl.innerHTML = `
+    <div><span>Empreintes</span><strong>${atlas.score()}</strong></div>
+    <div><span>Fresques</span><strong>${disponibles.length}</strong></div>
+    <div><span>À venir</span><strong>${aVenir}</strong></div>`;
   renderFinal(finalEl);
 }
 
