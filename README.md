@@ -33,6 +33,8 @@ En ligne (HTTPS, pour le téléphone) : GitHub Pages.
 ## Modèles 3D et crédits
 - models/turtle.glb — « Turtle » par 1674143 sur Sketchfab
   (https://sketchfab.com/3d-models/turtle-161e0529cd064993984fe5eee42105dc), licence CC-BY 4.0
+- models/butterfly.glb — « BUTTERFLY » par Rukh3D sur Sketchfab
+  (https://sketchfab.com/3d-models/butterfly-d642db74a3fa491a8143bd088b408094), licence CC-BY 4.0
 - models/molecule.glb — « Water Molecule ball-and-stick model » par borkia sur Sketchfab
   (https://sketchfab.com/3d-models/water-molecule-ball-and-stick-model-b3b508a8fde242ddb4d5baa8988ee090),
   licence CC-BY-SA 4.0

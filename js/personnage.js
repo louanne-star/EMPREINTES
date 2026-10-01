@@ -44,7 +44,7 @@ function createPose(body, cfg) {
       cfg.pitch + nose + stroke * (0.05 + effortSmooth * 0.1) - effortSmooth * 0.1,
       Math.sin(t * 0.7) * 0.06,
     );
-    body.position.z = Math.sin(t + 0.6) * 0.008;
+    body.position.z = Math.sin(t + 0.6) * (cfg.bob ?? 0.008);
     return { t, effort: effortSmooth };
   };
 }

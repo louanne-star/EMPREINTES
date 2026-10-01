@@ -39,5 +39,34 @@ export const FRESQUES = [
     },
   },
 
-  // Deuxième fresque : copier le bloc ci-dessus, avec targetIndex: 1, et adapter.
+  {
+    // La Chimie des Couleurs (hibiscus). Le papillon n'est pas peint sur la fresque :
+    // il sort de la fleur. Zones et point de départ à ajuster avec la vraie photo.
+    id: 'hibiscus',
+    targetIndex: 1,
+    empreinte: 'petale',
+    spawn: [0, 0],
+    heading: 0,
+    bounds: { x: 0.6, y: 0.3 },
+    geluleZone: { x: 0.45, y: 0.17 },
+    depth: [0.08, 0.45],
+    speed: 0.16,
+
+    personnage: {
+      // « BUTTERFLY » par Rukh3D sur Sketchfab, licence CC-BY 4.0 (crédit obligatoire)
+      model: './models/butterfly.glb',
+      length: 0.3,
+      rotation: [Math.PI / 2, Math.PI / 2, 0],
+      tilt34: 0.35,                     // surtout vu de dessus, pour voir les ailes
+      pitch: -0.2,
+      bob: 0.025,                       // vol plus sautillant que la nage de la tortue
+      clip: /\|3$/,                     // animations du modèle : « 3 », « ! », « 2 »
+    },
+
+    molecule: {
+      // Provisoire : même molécule que la tortue, en attendant la cyanidine
+      model: './models/molecule.glb',
+      size: 0.09,
+    },
+  },
 ];
