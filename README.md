@@ -40,7 +40,8 @@ L'Atlas est complet quand toutes les Empreintes « disponible: true » (js/empre
   (https://sketchfab.com/3d-models/turtle-161e0529cd064993984fe5eee42105dc), licence CC-BY 4.0
 - models/butterfly.glb — « BUTTERFLY » par Rukh3D sur Sketchfab
   (https://sketchfab.com/3d-models/butterfly-d642db74a3fa491a8143bd088b408094), licence CC-BY 4.0
-- models/loriquet.glb — « Australian Rainbow Lorikeet » (fichier 12242, source et licence à compléter).
+- models/loriquet.glb — « Australian Rainbow Lorikeet v1 » sur Free3D
+  (https://free3d.com/3d-model/australian-rainbow-lorikeet-v1--619720.html), licence à vérifier sur la page.
   Converti depuis models/originaux/*.obj (hors GitHub) avec outils/loriquet-ailes.mjs et
   outils/loriquet-couleurs.mjs : couleurs provisoires par zone (texture manquante) et carte des
   ailes, car les ailes sont soudées au corps. Le battement est calculé dans js/personnage.js.
