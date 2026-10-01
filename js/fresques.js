@@ -94,10 +94,12 @@ export const FRESQUES = [
       length: 0.45,
       // Modèle « Z vers le haut », tête vers +Y, oiseau posé penché à 45°
       rotation: [0, Math.PI / 4, -Math.PI / 2],
-      tilt34: 0.3,
+      tilt34: 1.0,                      // vue de 3/4 : on voit son flanc, comme le loriquet peint
       pitch: -0.1,
       bob: 0.02,
-      wings: {
+      // Battement désactivé : les ailes de ce modèle sont soudées au corps, la déformation
+      // n'était pas réaliste. Pour le réactiver, renommer « wingsOff » en « wings ».
+      wingsOff: {
         weight: '_wing',                // ailes soudées au corps : poids par sommet (0 corps, 1 aile)
         pivot: [6, -5.65, 14.38],       // épaule gauche
         spine: [0, 1, 1],
