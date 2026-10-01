@@ -131,6 +131,16 @@
     .actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
     .actions .btn { flex: 1; padding: .7rem; }
 
+    /* Atlas : page entière */
+    #atlas { position: fixed; z-index: 20; inset: 0; overflow-y: auto; background: var(--fond);
+             -webkit-overflow-scrolling: touch; }
+    .atlas-tete { position: sticky; top: 0; z-index: 1; display: flex; align-items: center; gap: 12px;
+                  padding: calc(16px + env(safe-area-inset-top)) 16px 16px; background: var(--sapin); color: #fff;
+                  box-shadow: 0 4px 14px rgba(31, 42, 36, .15); }
+    .atlas-tete h2 { flex: 1; margin: 0; font-size: 1.3rem; color: #fff; }
+    #atlas-close { flex: none; width: 40px; height: 40px; border-radius: 50%; border: 0;
+                   background: rgba(255, 255, 255, .15); color: #fff; font-size: 1.1rem; }
+    .atlas-corps { max-width: 560px; margin: 0 auto; padding: 16px 16px calc(24px + env(safe-area-inset-bottom)); }
     #atlas-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .6rem; }
     .slot { display: flex; gap: .8rem; align-items: flex-start; padding: .8rem; border-radius: 14px;
             background: var(--surface); border: 1px solid var(--ligne); }
@@ -155,7 +165,7 @@
              border: 2px solid var(--sapin); }
     .final h3 { margin: 0 0 .4rem; }
 
-    #atlas-footer { margin: 1rem 0 0; text-align: center; color: var(--muted); }
+    #atlas-footer { margin: 0 0 1rem; text-align: center; font-weight: 600; color: var(--marron); }
     .credit { margin: .8rem 0 0; font-size: .7rem; color: var(--muted); text-align: center; line-height: 1.5; }
   </style>
   <script type="importmap">
@@ -181,17 +191,15 @@
       </header>
 
       <p class="intro">
-        Sur le campus, les fresques de Kuby Kolor cachent une <strong>mémoire invisible</strong> :
-        la signature moléculaire des espèces calédoniennes. Montée des eaux, déforestation,
-        réchauffement… cette mémoire s'efface. Deviens <strong>collecteur de mémoire</strong>
-        et sauve-la, une Empreinte à la fois.
+        Les fresques de Kuby Kolor cachent la <strong>mémoire invisible</strong> des espèces calédoniennes.
+        Deviens <strong>collecteur de mémoire</strong> et sauve-la, une Empreinte à la fois.
       </p>
 
       <h2>Comment jouer</h2>
       <ol class="etapes">
         <li><span class="num">1</span><div>
           <strong>Vise une fresque</strong>
-          <p>Place-toi à 2 ou 3 mètres et garde toute l'œuvre dans l'écran.</p>
+          <p>Place-toi à 2 ou 3 mètres, l'œuvre entière dans l'écran.</p>
         </div></li>
         <li><span class="num">2</span><div>
           <strong>Elle prend vie</strong>
@@ -199,14 +207,11 @@
         </div></li>
         <li><span class="num">3</span><div>
           <strong>Attrape l'Empreinte</strong>
-          <p>Dirige-le avec le joystick jusqu'à la molécule qui brille. Elle flotte devant le mur :
-             le personnage s'approche et s'éloigne de toi en se déplaçant, attrape-la quand il est à la bonne distance.
-             Tu peux détourner le téléphone, la scène continue.</p>
+          <p>Dirige-le avec le joystick jusqu'à la molécule qui brille. Elle flotte devant la fresque.</p>
         </div></li>
         <li><span class="num">4</span><div>
           <strong>Complète ton Atlas</strong>
-          <p>Chaque Empreinte rejoint ton Atlas avec la voix de l'espèce et sa molécule.
-             Réunis-les toutes pour découvrir le message final.</p>
+          <p>Réunis toutes les Empreintes pour découvrir le message final.</p>
         </div></li>
       </ol>
 
@@ -221,9 +226,7 @@
       </ul>
 
       <div class="conseils">
-        <p>📷 Autorise l'accès à la caméra quand ton téléphone le demande.</p>
-        <p>📶 Une connexion internet est nécessaire.</p>
-        <p>🔊 Monte le son pour écouter la voix des espèces.</p>
+        <p>📷 Autorise la caméra · 📶 Internet nécessaire · 🔊 Monte le son</p>
       </div>
 
       <div class="cta">
@@ -260,18 +263,21 @@
     </div>
   </section>
 
-  <section id="atlas" class="panel" hidden>
-    <h2>Atlas de la mémoire vivante</h2>
-    <p class="status">Une Empreinte par fresque du parcours.</p>
+  <section id="atlas" hidden>
+    <header class="atlas-tete">
+      <h2>Atlas de la mémoire vivante</h2>
+      <button id="atlas-close" aria-label="Fermer l'Atlas">✕</button>
+    </header>
+    <div class="atlas-corps">
+    <p id="atlas-footer"></p>
     <div class="final" id="atlas-final" hidden></div>
     <ul id="atlas-list"></ul>
-    <p id="atlas-footer"></p>
-    <div class="actions"><button id="atlas-close" class="btn primary">Fermer</button></div>
     <p class="credit">Fresques : Kuby Kolor · Application : Lou-Anne Grosjean &amp; Ondine Taukolo<br>
       Tortue 3D : « Turtle » par 1674143 (Sketchfab), licence CC-BY 4.0<br>
       Papillon 3D : « BUTTERFLY » par Rukh3D (Sketchfab), licence CC-BY 4.0<br>
       Oiseau 3D : « Love Birds Parrot » par Nyilonelycompany (Sketchfab), licence CC-BY-NC 4.0<br>
       Molécule 3D : « Water Molecule ball-and-stick model » par borkia (Sketchfab), licence CC-BY-SA 4.0</p>
+    </div>
   </section>
 
   <script type="module" src="./js/ar.js"></script>
