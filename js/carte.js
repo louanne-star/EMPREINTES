@@ -22,9 +22,11 @@ export function afficherCarte(el, listeEl) {
     dragging: !tactile,   // au doigt, on laisse la page défiler ; zoom avec + / −
     tap: false,
   });
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  // Vue satellite Esri (gratuite, crédit obligatoire)
+  L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+    maxNativeZoom: 19,
+    maxZoom: 20,
+    attribution: 'Imagerie © Esri, Maxar, Earthstar Geographics',
   }).addTo(carte);
 
   fresques.forEach((e, i) => {
