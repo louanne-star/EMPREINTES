@@ -1,11 +1,14 @@
 // Les 5 Empreintes du parcours (contenu issu de la fiche projet).
 // disponible : la fresque existe sur le campus (compte pour compléter l'Atlas).
+// lieu, gps : où trouver la fresque sur le campus (carte « Où nous trouver »).
 // vignette : photo de la fresque (cartes de l'accueil et de l'Atlas).
 // audio : fichier MP3 joué par le bouton « Écouter » (sinon voix du téléphone).
 // dessin : formule de la molécule, générée depuis sa notation SMILES (voir molecules/).
 export const EMPREINTES = [
   {
     id: 'carapace',
+    lieu: "Mur à gauche du FabLab",
+    gps: [-22.26225646889539, 166.40519669240635],
     vignette: './images/carte-tortue.jpg',
     disponible: true,
     dessin: './molecules/carapace.svg',
@@ -22,6 +25,8 @@ export const EMPREINTES = [
   },
   {
     id: 'petale',
+    lieu: "La terrasse à côté de Sister Food",
+    gps: [-22.26316809139971, 166.403974778562],
     vignette: './images/carte-hibiscus.jpg',
     disponible: true,
     dessin: './molecules/petale.svg',
@@ -38,6 +43,8 @@ export const EMPREINTES = [
   },
   {
     id: 'plume',
+    lieu: "Dans le patio, au niveau de la BU",
+    gps: [-22.263152596669002, 166.40438047315288],
     vignette: './images/carte-loriquet.jpg',
     disponible: true,
     dessin: './molecules/plume.svg',

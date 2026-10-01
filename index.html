@@ -8,6 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
   <style>
     :root {
       --vert-fond: #2f4a2a;      /* fond vert profond */
@@ -102,6 +103,28 @@
                   background: var(--vert-fond); color: #fff; font-weight: 700; }
     .tuile strong { display: block; font-size: .85rem; font-weight: 600; line-height: 1.25; }
     .tuile span { display: block; color: var(--gris); font-size: .72rem; line-height: 1.3; }
+    /* Où nous trouver */
+    .plan { position: relative; isolation: isolate; border-radius: var(--rayon); overflow: hidden;
+            box-shadow: var(--ombre); background: var(--gris-clair); }
+    #plan-carte { height: 260px; }
+    .plan .leaflet-control-attribution { font-size: 9px; }
+    .plan .leaflet-popup-content { font-family: 'Poppins', system-ui, sans-serif; font-size: .8rem; line-height: 1.45; }
+    .plan .leaflet-popup-content a { color: var(--vert); font-weight: 600; }
+    .repere span { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%;
+                   background: var(--vert-fond); color: #fff; font: 700 .9rem 'Poppins', sans-serif;
+                   border: 3px solid #fff; box-shadow: 0 4px 12px rgba(0, 0, 0, .3); }
+    .lieux { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 10px; }
+    .lieu-ligne { display: flex; align-items: center; gap: 12px; padding: 8px; border-radius: 20px;
+                  background: var(--gris-clair); cursor: pointer; }
+    .lieu-ligne img { flex: none; width: 52px; height: 52px; border-radius: 14px; object-fit: cover; }
+    .lieu-ligne div { flex: 1; min-width: 0; }
+    .lieu-ligne strong { display: block; font-size: .85rem; font-weight: 600; }
+    .lieu-ligne span { display: block; color: var(--gris); font-size: .74rem; }
+    .repere-mini { flex: none; width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center;
+                   background: var(--vert-fond); color: #fff; font-size: .72rem; font-weight: 700; }
+    .rond.petit-rond { width: 40px; height: 40px; }
+    .rond.petit-rond svg { width: 18px; height: 18px; }
+
     .conseils { margin: 20px 0 0; color: var(--gris); font-size: .78rem; text-align: center; }
 
     /* Barre d'action en bas */
@@ -191,7 +214,8 @@
     "imports": {
       "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
       "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/",
-      "mindar-image-three": "https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js"
+      "mindar-image-three": "https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-three.prod.js",
+      "leaflet": "https://unpkg.com/leaflet@1.9.4/dist/leaflet-src.esm.js"
     }
   }
   </script>
@@ -240,6 +264,12 @@
         <div class="tuile"><span class="num">3</span><div><strong>Attrape l'Empreinte</strong><span>Avec le joystick</span></div></div>
         <div class="tuile"><span class="num">4</span><div><strong>Complète l'Atlas</strong><span>Et découvre le message final</span></div></div>
       </div>
+      <div class="titre-section"><h3>Où nous trouver</h3><span>Campus de Nouville</span></div>
+      <div class="plan">
+        <div id="plan-carte" aria-label="Carte des fresques"></div>
+      </div>
+      <ul class="lieux" id="plan-lieux"></ul>
+
       <p class="conseils">📷 Autorise la caméra · 📶 Internet · 🔊 Monte le son</p>
     </div>
 

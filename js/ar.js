@@ -123,7 +123,15 @@ $('#atlas-list').addEventListener('click', (e) => {
 // Écran de bienvenue → accueil : glisser le rond « Go » vers le haut (ou le toucher)
 function entrer() {
   $('#splash').hidden = true;
+  ouvrirAccueil();
+}
+
+// La carte est chargée à part : si elle échoue (réseau), le jeu fonctionne quand même
+function ouvrirAccueil() {
   $('#accueil').hidden = false;
+  import('./carte.js')
+    .then((m) => m.afficherCarte($('#plan-carte'), $('#plan-lieux')))
+    .catch((err) => console.warn('Carte indisponible', err));
 }
 {
   const go = $('#splash-go');
@@ -157,7 +165,7 @@ function entrer() {
 $('#accueil-atlas').addEventListener('click', openAtlas);
 
 // Le bouton « maison » rouvre la page d'accueil ; l'expérience continue derrière
-$('#aide-btn').addEventListener('click', () => { $('#accueil').hidden = false; });
+$('#aide-btn').addEventListener('click', ouvrirAccueil);
 
 let started = false;
 $('#start').addEventListener('click', async () => {
