@@ -4,3 +4,4 @@
 /fresque *.webp
 node_modules/
 /targets/*.webp
+/models/originaux/
