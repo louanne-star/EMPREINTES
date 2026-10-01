@@ -27,7 +27,7 @@ En ligne (HTTPS, pour le téléphone) : GitHub Pages.
    (mind-ar-js > Tools > Compile), dans le même ordre que la liste de js/fresques.js.
 3. Mettre ce fichier dans targets/ et son chemin dans TARGETS_FILE (js/fresques.js).
 4. Modèles .glb du personnage et de la molécule dans models/.
-5. Copier le bloc de la tortue dans js/fresques.js, mettre targetIndex: 1 et adapter.
+5. Copier un bloc dans js/fresques.js, mettre le targetIndex suivant (2 pour le loriquet) et adapter.
 6. Ajouter le crédit des modèles en bas de l'Atlas (index.html) s'ils viennent de Sketchfab.
 
 ## Formules des molécules (Atlas)
