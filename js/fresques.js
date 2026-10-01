@@ -88,26 +88,15 @@ export const FRESQUES = [
     speed: 0.36,
 
     personnage: {
-      // « Australian Rainbow Lorikeet v1 » (Free3D), converti depuis l'OBJ avec sa texture,
-      // plus une carte des ailes (voir outils/loriquet-ailes.mjs).
+      // Loriquet généré avec Meshy AI, animé dans Blender (outils/loriquet-animer.py)
       model: './models/loriquet.glb',
-      length: 0.45,
-      // Modèle « Z vers le haut », tête vers +Y, oiseau posé penché à 45°
-      rotation: [0, Math.PI / 4, -Math.PI / 2],
-      tilt34: 1.0,                      // vue de 3/4 : on voit son flanc, comme le loriquet peint
-      pitch: -0.1,
+      length: 0.5,                      // envergure, en largeurs de fresque
+      rotation: [Math.PI / 2, Math.PI / 2, 0],
+      tilt34: 0.75,                     // vue de 3/4 : on voit son flanc, comme le loriquet peint
+      pitch: 0.3,                       // le modèle a la tête relevée : on la ramène à l'horizontale
       bob: 0.02,
-      // Battement désactivé : les ailes de ce modèle sont soudées au corps, la déformation
-      // n'était pas réaliste. Pour le réactiver, renommer « wingsOff » en « wings ».
-      wingsOff: {
-        weight: '_wing',                // ailes soudées au corps : poids par sommet (0 corps, 1 aile)
-        pivot: [6, -5.65, 14.38],       // épaule gauche
-        spine: [0, 1, 1],
-        back: [0, -1, 1],
-        spread: 1.3,                    // ailes déployées sur le côté
-        amp: 0.5,                       // amplitude du battement
-        freq: 18,                       // vitesse du battement
-      },
+      clip: /vol/,
+      animSpeed: 1,                     // vitesse du battement (1 = 2 battements par seconde)
     },
 
     molecule: {

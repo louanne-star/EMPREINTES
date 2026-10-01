@@ -76,8 +76,6 @@ async function loadModel(cfg) {
   root.add(body);
   const pose = createPose(body, cfg);
 
-  const wings = cfg.wings ? setupWings(model, cfg.wings) : null;
-
   // Joue l'animation du modèle s'il en a une
   let mixer = null;
   if (gltf.animations.length) {
@@ -90,72 +88,10 @@ async function loadModel(cfg) {
     root,
     update(dt, effort, turn = 0, heading = 0, climb = 0) {
       const p = pose(dt, effort, turn, heading, climb);
-      wings?.update(dt, p.effort);
       if (mixer) {
         mixer.timeScale = (0.6 + p.effort * 1.0) * (cfg.animSpeed ?? 1);
         mixer.update(dt);
       }
-    },
-  };
-}
-
-// Battement d'ailes calculé en code, pour un modèle aux ailes repliées (oiseau posé).
-// Chaque sommet des ailes tourne autour de l'épaule de son côté (x > 0 ou x < 0) :
-// d'abord l'aile se déplie sur le côté (autour de l'axe du dos), puis elle bat
-// (autour de l'axe du corps). Coordonnées dans le repère du modèle.
-// w = { mesh, pivot: épaule gauche, spine: axe queue → tête, back: axe ventre → dos,
-//       spread: ouverture (rad), amp: amplitude du battement (rad), freq: battements (rad/s),
-//       weight: nom d'un attribut de sommet de 0 (corps) à 1 (aile), pour un modèle où les
-//       ailes sont soudées au corps (sinon tout le maillage `mesh` est considéré comme aile) }
-function setupWings(model, w) {
-  let mesh = w.mesh ? model.getObjectByName(w.mesh) : null;
-  if (!w.mesh) model.traverse((o) => { if (!mesh && o.isMesh) mesh = o; });
-  if (!mesh) {
-    console.warn(`Ailes « ${w.mesh} » introuvables dans le modèle.`);
-    return null;
-  }
-  const k = w.weight ?? '1.0';
-  const uniforms = {
-    uPivot: { value: new THREE.Vector3(...w.pivot) },
-    uSpine: { value: new THREE.Vector3(...w.spine).normalize() },
-    uBack: { value: new THREE.Vector3(...w.back).normalize() },
-    uSpread: { value: w.spread },
-    uFlap: { value: 0 },
-  };
-  const mat = mesh.material.clone();
-  mat.onBeforeCompile = (shader) => {
-    Object.assign(shader.uniforms, uniforms);
-    shader.vertexShader = shader.vertexShader
-      .replace('#include <common>', `#include <common>
-        uniform vec3 uPivot, uSpine, uBack;
-        uniform float uSpread, uFlap;
-        ${w.weight ? `attribute float ${w.weight};` : ''}
-        vec3 rotAxis(vec3 v, vec3 k, float a) {
-          float c = cos(a), s = sin(a);
-          return v * c + cross(k, v) * s + k * dot(k, v) * (1.0 - c);
-        }
-        vec3 wingTurn(vec3 v, float side, float k) {
-          v = rotAxis(v, uBack, -side * uSpread * k);
-          return rotAxis(v, uSpine, side * uFlap * k);
-        }`)
-      .replace('#include <beginnormal_vertex>', `#include <beginnormal_vertex>
-        objectNormal = wingTurn(objectNormal, sign(position.x), ${k});`)
-      .replace('#include <begin_vertex>', `#include <begin_vertex>
-        {
-          float side = sign(position.x);
-          vec3 pivot = vec3(uPivot.x * side, uPivot.yz);
-          transformed = wingTurn(transformed - pivot, side, ${k}) + pivot;
-        }`);
-  };
-  mat.customProgramCacheKey = () => 'ailes';
-  mesh.material = mat;
-
-  let phase = 0;
-  return {
-    // effort 0 : plané lent ; effort 1 : battements rapides et amples
-    update(dt, effort) {
-      phase += dt * w.freq * (0.6 + effort * 0.8);
-      uniforms.uFlap.value = 0.15 + Math.sin(phase) * w.amp * (0.6 + effort * 0.4);
     },
   };
 }

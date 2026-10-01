@@ -40,11 +40,9 @@ L'Atlas est complet quand toutes les Empreintes « disponible: true » (js/empre
   (https://sketchfab.com/3d-models/turtle-161e0529cd064993984fe5eee42105dc), licence CC-BY 4.0
 - models/butterfly.glb — « BUTTERFLY » par Rukh3D sur Sketchfab
   (https://sketchfab.com/3d-models/butterfly-d642db74a3fa491a8143bd088b408094), licence CC-BY 4.0
-- models/loriquet.glb — « Australian Rainbow Lorikeet v1 » sur Free3D
-  (https://free3d.com/3d-model/australian-rainbow-lorikeet-v1--619720.html), licence à vérifier sur la page.
-  Converti depuis models/originaux/ (.obj + .mtl + texture, hors GitHub) avec obj2gltf puis
-  outils/loriquet-ailes.mjs (carte des ailes, car elles sont soudées au corps) et
-  outils/loriquet-finir.mjs. Le battement est calculé dans js/personnage.js.
+- models/loriquet.glb — loriquet généré avec Meshy AI (squelette inclus), battement d'ailes
+  ajouté dans Blender par outils/loriquet-animer.py (textures réduites à 1024 px, 3,4 Mo).
+  Original dans models/originaux/ (hors GitHub).
 - models/molecule.glb — « Water Molecule ball-and-stick model » par borkia sur Sketchfab
   (https://sketchfab.com/3d-models/water-molecule-ball-and-stick-model-b3b508a8fde242ddb4d5baa8988ee090),
   licence CC-BY-SA 4.0
