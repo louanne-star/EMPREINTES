@@ -20,7 +20,7 @@ export const FRESQUES = [
     bounds: { x: 0.6, y: 0.3 },         // zone de déplacement
     geluleZone: { x: 0.45, y: 0.17 },   // zone où la gélule peut apparaître
     depth: [0.06, 0.38],                // distance au mur : min, max
-    speed: 0.14,                        // largeurs de fresque par seconde
+    speed: 0.18,                        // largeurs de fresque par seconde
 
     personnage: {
       // « Turtle » par 1674143 sur Sketchfab, licence CC-BY 4.0 (crédit obligatoire)
