@@ -89,7 +89,7 @@ async function loadModel(cfg) {
     update(dt, effort, turn = 0, heading = 0, climb = 0) {
       const p = pose(dt, effort, turn, heading, climb);
       if (mixer) {
-        mixer.timeScale = 0.6 + p.effort * 1.0;
+        mixer.timeScale = (0.6 + p.effort * 1.0) * (cfg.animSpeed ?? 1);
         mixer.update(dt);
       }
     },

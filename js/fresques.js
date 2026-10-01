@@ -52,7 +52,7 @@ export const FRESQUES = [
     bounds: { x: 0.6, y: 0.4 },
     geluleZone: { x: 0.42, y: 0.26 },
     depth: [0.08, 0.45],
-    speed: 0.16,
+    speed: 0.3,
 
     personnage: {
       // « BUTTERFLY » par Rukh3D sur Sketchfab, licence CC-BY 4.0 (crédit obligatoire)
@@ -62,6 +62,7 @@ export const FRESQUES = [
       tilt34: 0.35,                     // surtout vu de dessus, pour voir les ailes
       pitch: -0.2,
       bob: 0.025,                       // vol plus sautillant que la nage de la tortue
+      animSpeed: 2.5,                   // battements d'ailes accélérés (1 = vitesse d'origine)
       clip: /\|3$/,                     // animations du modèle : « 3 », « ! », « 2 »
     },
 
