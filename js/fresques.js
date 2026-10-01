@@ -6,7 +6,8 @@
 //
 // Repère d'une fresque : largeur 1, centre en (0, 0), x vers la droite, y vers le
 // haut, z vers le visiteur. Hauteur = hauteur / largeur de la photo.
-export const TARGETS_FILE = './targets/tortue.mind';
+// Contenu actuel : 0 = tortue-source.jpg, 1 = hibiscus.jpg
+export const TARGETS_FILE = './targets/fresques.mind';
 
 export const FRESQUES = [
   {
