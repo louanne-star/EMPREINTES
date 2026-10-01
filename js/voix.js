@@ -1,19 +1,19 @@
-// « Voix de l'espèce » : joue audio/<id>.mp3 s'il existe (voix enregistrée ou générée),
+// « Voix de l'espèce » : joue le fichier empreinte.audio s'il existe (voix enregistrée ou générée),
 // sinon lit le texte avec la meilleure voix française du téléphone.
 
 let audio = null;
 let onStop = null;
-const fichiers = {}; // id → true si audio/<id>.mp3 existe
+const fichiers = {}; // chemin → true si le fichier audio existe
 
 // À appeler au démarrage : sur iPhone, la voix du téléphone doit démarrer pendant le
 // toucher, il faut donc savoir à l'avance s'il y a un fichier audio.
-export async function verifierFichiers(ids) {
-  await Promise.all(ids.map(async (id) => {
+export async function verifierFichiers(chemins) {
+  await Promise.all(chemins.filter(Boolean).map(async (chemin) => {
     try {
-      const r = await fetch(`./audio/${id}.mp3`, { method: 'HEAD' });
-      fichiers[id] = r.ok;
+      const r = await fetch(chemin, { method: 'HEAD' });
+      fichiers[chemin] = r.ok;
     } catch {
-      fichiers[id] = false;
+      fichiers[chemin] = false;
     }
   }));
 }
@@ -50,8 +50,8 @@ export const voix = {
     voix.arreter();
     onStop = fin;
     const termine = () => { if (onStop === fin) { onStop = null; fin(); } };
-    if (!fichiers[empreinte.id]) return lireTexte(empreinte.voix, termine);
-    audio = new Audio(`./audio/${empreinte.id}.mp3`);
+    if (!fichiers[empreinte.audio]) return lireTexte(empreinte.voix, termine);
+    audio = new Audio(empreinte.audio);
     audio.onended = termine;
     try {
       await audio.play();

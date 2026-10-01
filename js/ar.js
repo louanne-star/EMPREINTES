@@ -80,7 +80,7 @@ function updateAtlasCount() {
 // --- Interface ---
 
 updateAtlasCount();
-verifierFichiers(EMPREINTES.map((e) => e.id));
+verifierFichiers(EMPREINTES.map((e) => e.audio));
 
 const ECOUTER = '🔊 Écouter';
 $('#listen').addEventListener('click', () => {

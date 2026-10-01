@@ -1,5 +1,6 @@
 // Les 5 Empreintes du parcours (contenu issu de la fiche projet).
 // disponible : la fresque existe sur le campus (compte pour compléter l'Atlas).
+// audio : fichier MP3 joué par le bouton « Écouter » (sinon voix du téléphone).
 // dessin : formule de la molécule, générée depuis sa notation SMILES (voir molecules/).
 export const EMPREINTES = [
   {
@@ -13,6 +14,7 @@ export const EMPREINTES = [
     molecule: 'Kératine',
     fonction: 'Protection',
     couleur: 0xe6d3a3,
+    audio: './audio/tortue.mp3',
     voix: "Je suis la tortue verte. Ma carapace est faite de kératine, la même protéine que vos ongles. Je peux vivre plus de 80 ans, si l'océan m'en laisse le temps.",
     fait: "La kératine protège la tortue depuis des millions d'années : une matière naturelle résistante, de la même famille moléculaire que nos ongles ou nos cheveux.",
   },
@@ -27,6 +29,7 @@ export const EMPREINTES = [
     molecule: 'Cyanidine',
     fonction: 'Communication',
     couleur: 0xc2185b,
+    audio: './audio/papillon.mp3',
     voix: "Je suis le papillon, messager de l'hibiscus. Sa couleur est révélée par la cyanidine, un pigment naturel qui m'attire depuis toujours. Sans fleurs, plus de messagers ; sans messagers, plus de fleurs.",
     fait: "La cyanidine est le pigment naturel responsable des teintes rouges et pourpres de nombreuses fleurs tropicales. Elle explique pourquoi l'hibiscus attire ses pollinisateurs.",
   },
@@ -41,6 +44,7 @@ export const EMPREINTES = [
     molecule: 'Mélanine et caroténoïdes',
     fonction: 'Adaptation',
     couleur: 0xff9800,
+    audio: './audio/loriquet.mp3',
     voix: "Je suis le loriquet. Mes couleurs viennent de la mélanine et des caroténoïdes, une combinaison qui fait de moi unique à mon espèce. Sans forêt, plus de couleurs ; sans couleurs, plus de loriquet.",
     fait: "La mélanine et les caroténoïdes sont les pigments responsables des couleurs du plumage tropical, signature unique de l'espèce.",
   },

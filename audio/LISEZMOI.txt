@@ -1,8 +1,7 @@
 Voix des espèces (bouton « Écouter »).
-Déposer ici un fichier MP3 par Empreinte, nommé exactement :
-  carapace.mp3  (tortue)
-  petale.mp3    (papillon)
-  plume.mp3     (loriquet)
-  feuille.mp3   (cagou / kauri, fresque à venir)
-  armure.mp3    (crabe de cocotier, fresque à venir)
-S'il manque un fichier, l'app lit le texte avec la voix du téléphone.
+Déposer ici les fichiers MP3, nommés exactement :
+  tortue.mp3    (Empreinte de Carapace)
+  papillon.mp3  (Empreinte de Pétale)
+  loriquet.mp3  (Empreinte de Plume)
+Le nom de chaque fichier est défini par le champ « audio » dans js/empreintes.js.
+Si un fichier manque, le texte est lu par la voix du téléphone.
