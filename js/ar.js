@@ -4,6 +4,8 @@ import { FRESQUES, TARGETS_FILE } from './fresques.js';
 import { createGame } from './game.js';
 import { createControls } from './controls.js';
 import { atlas, renderAtlas, renderFinal } from './atlas.js';
+import { voix, verifierFichiers } from './voix.js';
+import { EMPREINTES } from './empreintes.js';
 
 const $ = (sel) => document.querySelector(sel);
 
@@ -34,6 +36,7 @@ function tick(dt) {
   if (seen && active?.state !== 'catch') {
     active?.stop();
     controls.hide();
+    voix.arreter();
     $('#reveal').hidden = true;
     $('#hint').hidden = true;
     active = seen;
@@ -77,16 +80,18 @@ function updateAtlasCount() {
 // --- Interface ---
 
 updateAtlasCount();
+verifierFichiers(EMPREINTES.map((e) => e.id));
 
+const ECOUTER = '🔊 Écouter';
 $('#listen').addEventListener('click', () => {
-  if (!active || !('speechSynthesis' in window)) return;
-  speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(active.empreinte.voix);
-  u.lang = 'fr-FR';
-  speechSynthesis.speak(u);
+  if (!active) return;
+  if (voix.enCours) return voix.arreter();
+  $('#listen').textContent = '⏹ Arrêter';
+  voix.jouer(active.empreinte, () => { $('#listen').textContent = ECOUTER; });
 });
 
 $('#replay').addEventListener('click', () => {
+  voix.arreter();
   $('#reveal').hidden = true;
   active?.replay();
 });
@@ -97,7 +102,7 @@ const openAtlas = () => {
   $('#atlas').hidden = false;
 };
 $('#atlas-btn').addEventListener('click', openAtlas);
-$('#reveal-atlas').addEventListener('click', () => { $('#reveal').hidden = true; openAtlas(); });
+$('#reveal-atlas').addEventListener('click', () => { voix.arreter(); $('#reveal').hidden = true; openAtlas(); });
 $('#atlas-close').addEventListener('click', () => { $('#atlas').hidden = true; });
 
 $('#accueil-atlas').addEventListener('click', openAtlas);
