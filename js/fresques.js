@@ -40,15 +40,16 @@ export const FRESQUES = [
   },
 
   {
-    // La Chimie des Couleurs (hibiscus). Le papillon n'est pas peint sur la fresque :
-    // il sort de la fleur. Zones et point de départ à ajuster avec la vraie photo.
+    // La Chimie des Couleurs (hibiscus), photo : targets/hibiscus.jpg (hauteur 0,657).
+    // Le papillon n'est pas peint sur la fresque : il sort du pistil du grand
+    // hibiscus rouge, à droite, à côté de la formule de la cyanidine.
     id: 'hibiscus',
     targetIndex: 1,
     empreinte: 'petale',
-    spawn: [0, 0],
-    heading: 0,
-    bounds: { x: 0.6, y: 0.3 },
-    geluleZone: { x: 0.45, y: 0.17 },
+    spawn: [0.19, -0.15],
+    heading: Math.PI,                   // part vers la gauche, vers le centre de la fresque
+    bounds: { x: 0.6, y: 0.4 },
+    geluleZone: { x: 0.42, y: 0.26 },
     depth: [0.08, 0.45],
     speed: 0.16,
 
