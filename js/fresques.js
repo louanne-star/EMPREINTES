@@ -74,44 +74,6 @@ export const FRESQUES = [
     },
   },
 
-  {
-    // Le Langage des Plumes (loriquet), photo : targets/loriquet.jpg (hauteur 0,894).
-    // L'oiseau sort du loriquet peint, au centre-gauche, tourné vers la droite.
-    id: 'loriquet',
-    targetIndex: 2,
-    empreinte: 'plume',
-    spawn: [-0.07, 0.15],
-    heading: 0,
-    bounds: { x: 0.6, y: 0.5 },
-    geluleZone: { x: 0.42, y: 0.36 },
-    depth: [0.08, 0.45],
-    speed: 0.36,
-
-    personnage: {
-      // « Love Birds Parrot » par Nyilonelycompany sur Sketchfab, licence CC-BY-NC 4.0
-      // (crédit obligatoire, usage non commercial). Version allégée : 2 Mo au lieu de 51 Mo,
-      // sans l'animation d'origine (oiseau posé) ; le vol est calculé en code (wings).
-      model: './models/perroquet.glb',
-      length: 0.45,
-      // Oiseau posé et penché : axe queue → tête = (0, 0.6, 0.8), dos = (0, 0.8, -0.6)
-      rotation: [Math.PI, 0.927, -Math.PI / 2],
-      tilt34: 0.3,
-      pitch: -0.1,
-      bob: 0.02,
-      wings: {
-        mesh: 'Love_wings',
-        pivot: [0.05, 0.22, 0.02],      // épaule gauche
-        spine: [0, 0.6, 0.8],
-        back: [0, 0.8, -0.6],
-        spread: 1.35,                   // ailes déployées sur le côté
-        amp: 0.6,                       // amplitude du battement
-        freq: 20,                       // vitesse du battement
-      },
-    },
-
-    molecule: {
-      model: './models/molecule.glb',
-      size: 0.09,
-    },
-  },
+  // Le Langage des Plumes (loriquet) : targetIndex 2 dans fresques.mind,
+  // en attente du nouveau modèle 3D.
 ];

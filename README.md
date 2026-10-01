@@ -40,11 +40,6 @@ L'Atlas est complet quand toutes les Empreintes « disponible: true » (js/empre
   (https://sketchfab.com/3d-models/turtle-161e0529cd064993984fe5eee42105dc), licence CC-BY 4.0
 - models/butterfly.glb — « BUTTERFLY » par Rukh3D sur Sketchfab
   (https://sketchfab.com/3d-models/butterfly-d642db74a3fa491a8143bd088b408094), licence CC-BY 4.0
-- models/perroquet.glb — « Love Birds Parrot » par Nyilonelycompany sur Sketchfab
-  (https://sketchfab.com/3d-models/love-birds-parrot-e31e1c72cff140158b99172285b40056),
-  licence CC-BY-NC 4.0 (non commercial). Version allégée (2 Mo) : animation d'origine
-  retirée, transformations intégrées ; le battement d'ailes est calculé dans js/personnage.js.
-  L'original (51 Mo) est gardé hors GitHub dans models/originaux/.
 - models/molecule.glb — « Water Molecule ball-and-stick model » par borkia sur Sketchfab
   (https://sketchfab.com/3d-models/water-molecule-ball-and-stick-model-b3b508a8fde242ddb4d5baa8988ee090),
   licence CC-BY-SA 4.0
