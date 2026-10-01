@@ -1,7 +1,12 @@
 // Les 5 Empreintes du parcours (contenu issu de la fiche projet).
+// disponible : la fresque existe sur le campus (compte pour compléter l'Atlas).
+// dessin : formule de la molécule, générée depuis sa notation SMILES (voir molecules/).
 export const EMPREINTES = [
   {
     id: 'carapace',
+    disponible: true,
+    dessin: './molecules/carapace.svg',
+    legende: "Cystine : deux acides aminés de la kératine reliés par un pont soufre (S–S). Ces ponts rendent la carapace dure et résistante.",
     fresque: 'Les Architectes du Récif',
     personnage: 'la tortue',
     nom: 'Empreinte de Carapace',
@@ -13,6 +18,9 @@ export const EMPREINTES = [
   },
   {
     id: 'petale',
+    disponible: true,
+    dessin: './molecules/petale.svg',
+    legende: "Cyanidine : le pigment rouge-pourpre de l'hibiscus, la même formule que celle peinte sur la fresque.",
     fresque: 'La Chimie des Couleurs',
     personnage: 'le papillon',
     nom: 'Empreinte de Pétale',
@@ -24,6 +32,9 @@ export const EMPREINTES = [
   },
   {
     id: 'plume',
+    disponible: true,
+    dessin: './molecules/plume.svg',
+    legende: "DHICA : une des briques qui s'assemblent pour former la mélanine des plumes.",
     fresque: 'Le Langage des Plumes',
     personnage: 'le loriquet',
     nom: 'Empreinte de Plume',
@@ -35,6 +46,9 @@ export const EMPREINTES = [
   },
   {
     id: 'feuille',
+    disponible: false, // fresque pas encore peinte
+    dessin: null,
+    legende: "Chlorophylle",
     fresque: 'Le Souffle de la Forêt',
     personnage: 'le cagou',
     nom: 'Empreinte de Feuille',
@@ -46,6 +60,9 @@ export const EMPREINTES = [
   },
   {
     id: 'armure',
+    disponible: false, // fresque pas encore peinte
+    dessin: './molecules/armure.svg',
+    legende: "N-acétylglucosamine : la brique qui, répétée, forme la chitine de l'armure du crabe.",
     fresque: "L'Armure de la Mangrove",
     personnage: 'le crabe de cocotier',
     nom: "Empreinte d'Armure",
@@ -56,5 +73,12 @@ export const EMPREINTES = [
     fait: "Contrairement à un squelette interne, le crabe construit avec la chitine une armure externe et articulée, renouvelée à chaque mue.",
   },
 ];
+
+// Message final, quand toutes les Empreintes disponibles sont réunies
+export const MESSAGE_FINAL = {
+  titre: 'Atlas complet',
+  texte: "Nous sommes la tortue, le papillon et le loriquet. La mer, le jardin, le ciel. Chacun de nous porte une mémoire invisible, écrite dans nos molécules depuis des millions d'années. Tu l'as retrouvée, comprise et sauvegardée. Maintenant, transmets-la : une mémoire n'existe que si quelqu'un s'en souvient.",
+  suite: "D'autres fresques arriveront bientôt sur le campus : l'Atlas continuera de grandir.",
+};
 
 export const getEmpreinte = (id) => EMPREINTES.find((e) => e.id === id);

@@ -61,6 +61,18 @@
     .slot { display: flex; gap: .8rem; align-items: flex-start; padding: .7rem; border-radius: 12px;
             background: rgba(255, 255, 255, .06); }
     .slot.locked { opacity: .5; }
+    .slot.soon { opacity: .3; }
+    .slot > div { min-width: 0; flex: 1; }
+
+    /* Formule de la molécule */
+    .dessin { margin: .6rem 0 0; padding: .4rem; border-radius: 10px; background: rgba(0, 0, 0, .25); }
+    .dessin img { display: block; width: 100%; max-width: 280px; height: auto; margin: 0 auto; }
+    .dessin figcaption { font-size: .78rem; opacity: .8; line-height: 1.35; text-align: center; margin-top: .2rem; }
+
+    /* Message final */
+    .final { margin: 0 0 1rem; padding: 1rem; border-radius: 14px; border: 1px solid var(--accent);
+             background: rgba(0, 229, 192, .1); }
+    .final h3 { margin: 0 0 .4rem; color: var(--accent); }
     .slot small { display: block; opacity: .75; }
     .slot p { margin: .4rem 0 0; font-size: .85rem; font-style: italic; line-height: 1.4; }
     .capsule { flex: none; width: 18px; height: 40px; border-radius: 9px; margin-top: 2px;
@@ -83,7 +95,7 @@
   <div id="container"></div>
 
   <div id="hint" hidden>Vise une fresque du parcours</div>
-  <button id="atlas-btn">Atlas <span id="atlas-count">0/5</span></button>
+  <button id="atlas-btn">Atlas <span id="atlas-count"></span></button>
 
   <div id="joystick" hidden aria-label="Joystick"><div class="knob"></div></div>
 
@@ -91,6 +103,10 @@
     <h2 id="reveal-title"></h2>
     <span class="chip" id="reveal-molecule"></span>
     <p class="status" id="reveal-status"></p>
+    <div class="final" id="reveal-final" hidden></div>
+    <figure class="dessin" id="reveal-dessin">
+      <img alt=""><figcaption></figcaption>
+    </figure>
     <p class="voix" id="reveal-voix"></p>
     <p class="fait" id="reveal-fait"></p>
     <div class="actions">
@@ -103,6 +119,7 @@
   <section id="atlas" class="panel" hidden>
     <h2>Atlas de la mémoire vivante</h2>
     <p class="status">Une Empreinte par fresque du parcours.</p>
+    <div class="final" id="atlas-final" hidden></div>
     <ul id="atlas-list"></ul>
     <p id="atlas-footer"></p>
     <div class="actions"><button id="atlas-close" class="primary">Fermer</button></div>

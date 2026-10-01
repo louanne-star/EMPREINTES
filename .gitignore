@@ -1,5 +1,5 @@
-.DS_Store
-node_modules/
-*.crdownload
 # Photos originales (les versions recadrées sont dans targets/)
+*.crdownload
+.DS_Store
 /fresque *.webp
+node_modules/

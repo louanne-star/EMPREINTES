@@ -1,4 +1,4 @@
-import { EMPREINTES } from './empreintes.js';
+import { EMPREINTES, MESSAGE_FINAL } from './empreintes.js';
 
 // Collection du visiteur, gardée dans le navigateur (prototype).
 const KEY = 'empreintes.atlas.v1';
@@ -13,10 +13,14 @@ function save(list) {
 
 let collected = load();
 
+// Seules les fresques déjà peintes comptent pour compléter l'Atlas
+const disponibles = EMPREINTES.filter((e) => e.disponible);
+
 export const atlas = {
   has: (id) => collected.includes(id),
-  count: () => collected.length,
-  total: () => EMPREINTES.length,
+  count: () => disponibles.filter((e) => collected.includes(e.id)).length,
+  total: () => disponibles.length,
+  complete: () => atlas.count() === atlas.total(),
   // Renvoie true si l'Empreinte est nouvelle
   add(id) {
     if (collected.includes(id)) return false;
@@ -28,21 +32,44 @@ export const atlas = {
 
 const hex = (n) => '#' + n.toString(16).padStart(6, '0');
 
-export function renderAtlas(listEl, footerEl) {
-  listEl.innerHTML = EMPREINTES.map((e) => {
-    const ok = atlas.has(e.id);
+function slot(e) {
+  if (!e.disponible) {
     return `
-      <li class="slot ${ok ? 'ok' : 'locked'}">
-        <span class="capsule" style="--c:${ok ? hex(e.couleur) : '#555'}"></span>
-        <div>
-          <strong>${ok ? e.nom : '???'}</strong>
-          <small>${e.fresque}${ok ? ` · ${e.molecule} · ${e.fonction}` : ''}</small>
-          ${ok ? `<p>« ${e.voix} »</p>` : ''}
-        </div>
+      <li class="slot soon">
+        <span class="capsule" style="--c:#555"></span>
+        <div><strong>Fresque à venir</strong><small>${e.fresque}</small></div>
       </li>`;
-  }).join('');
+  }
+  if (!atlas.has(e.id)) {
+    return `
+      <li class="slot locked">
+        <span class="capsule" style="--c:#555"></span>
+        <div><strong>???</strong><small>${e.fresque} · à trouver</small></div>
+      </li>`;
+  }
+  return `
+    <li class="slot ok">
+      <span class="capsule" style="--c:${hex(e.couleur)}"></span>
+      <div>
+        <strong>${e.nom}</strong>
+        <small>${e.fresque} · ${e.molecule} · ${e.fonction}</small>
+        ${e.dessin ? `<figure class="dessin"><img src="${e.dessin}" alt="Formule : ${e.molecule}"><figcaption>${e.legende}</figcaption></figure>` : ''}
+        <p>« ${e.voix} »</p>
+      </div>
+    </li>`;
+}
 
-  footerEl.textContent = atlas.count() === atlas.total()
-    ? "Atlas complet : la mémoire vivante du monde calédonien est sauvée."
-    : `${atlas.count()} / ${atlas.total()} Empreintes collectées`;
+export function renderAtlas(listEl, footerEl, finalEl) {
+  listEl.innerHTML = EMPREINTES.map(slot).join('');
+  footerEl.textContent = `${atlas.count()} / ${atlas.total()} Empreintes collectées`;
+  renderFinal(finalEl);
+}
+
+// Le message collectif, affiché seulement quand l'Atlas est complet
+export function renderFinal(el) {
+  el.hidden = !atlas.complete();
+  el.innerHTML = `
+    <h3>${MESSAGE_FINAL.titre}</h3>
+    <p class="voix">« ${MESSAGE_FINAL.texte} »</p>
+    <p class="fait">${MESSAGE_FINAL.suite}</p>`;
 }

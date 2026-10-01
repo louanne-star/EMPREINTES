@@ -3,7 +3,7 @@ import { MindARThree } from 'mindar-image-three';
 import { FRESQUES, TARGETS_FILE } from './fresques.js';
 import { createGame } from './game.js';
 import { createControls } from './controls.js';
-import { atlas, renderAtlas } from './atlas.js';
+import { atlas, renderAtlas, renderFinal } from './atlas.js';
 
 const $ = (sel) => document.querySelector(sel);
 
@@ -51,7 +51,21 @@ function onCaught(empreinte) {
   $('#reveal-voix').textContent = `« ${empreinte.voix} »`;
   $('#reveal-fait').textContent = empreinte.fait;
   $('#reveal-status').textContent = isNew ? 'Nouvelle Empreinte sauvegardée dans ton Atlas' : 'Déjà dans ton Atlas';
+
+  const dessin = $('#reveal-dessin');
+  dessin.hidden = !empreinte.dessin;
+  if (empreinte.dessin) {
+    dessin.querySelector('img').src = empreinte.dessin;
+    dessin.querySelector('img').alt = `Formule : ${empreinte.molecule}`;
+    dessin.querySelector('figcaption').textContent = empreinte.legende;
+  }
+
+  // Dernière Empreinte trouvée : le message collectif s'affiche directement
+  if (isNew) renderFinal($('#reveal-final'));
+  else $('#reveal-final').hidden = true;
+
   $('#reveal').hidden = false;
+  $('#reveal').scrollTop = 0;
 }
 
 function updateAtlasCount() {
@@ -76,7 +90,8 @@ $('#replay').addEventListener('click', () => {
 });
 
 const openAtlas = () => {
-  renderAtlas($('#atlas-list'), $('#atlas-footer'));
+  renderAtlas($('#atlas-list'), $('#atlas-footer'), $('#atlas-final'));
+  $('#atlas').scrollTop = 0;
   $('#atlas').hidden = false;
 };
 $('#atlas-btn').addEventListener('click', openAtlas);

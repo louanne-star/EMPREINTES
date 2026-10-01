@@ -30,6 +30,11 @@ En ligne (HTTPS, pour le téléphone) : GitHub Pages.
 5. Copier le bloc de la tortue dans js/fresques.js, mettre targetIndex: 1 et adapter.
 6. Ajouter le crédit des modèles en bas de l'Atlas (index.html) s'ils viennent de Sketchfab.
 
+## Formules des molécules (Atlas)
+molecules/*.svg sont générés depuis leur notation SMILES par outils/dessiner-molecules.js
+(cystine pour la kératine, cyanidine, DHICA pour la mélanine, N-acétylglucosamine pour la chitine).
+L'Atlas est complet quand toutes les Empreintes « disponible: true » (js/empreintes.js) sont trouvées.
+
 ## Modèles 3D et crédits
 - models/turtle.glb — « Turtle » par 1674143 sur Sketchfab
   (https://sketchfab.com/3d-models/turtle-161e0529cd064993984fe5eee42105dc), licence CC-BY 4.0
