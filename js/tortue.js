@@ -6,7 +6,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 export const MODEL_URL = './models/turtle.glb';
 
 // Longueur de la tortue, en largeurs de fresque (1 = toute la fresque).
-const LENGTH = 0.24;
+const LENGTH = 0.42;
 
 // Orientation du modèle : on veut le dos face à la caméra et la tête vers la droite.
 // Réglage par défaut pour un .glb standard (haut = +Y, avant = +Z).

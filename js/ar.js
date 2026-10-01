@@ -23,8 +23,8 @@ const SPEED = 0.14;       // largeurs de fresque par seconde
 const ACCEL = 2.5;        // plus petit = plus d'inertie
 const TURN = 3.5;         // vitesse à laquelle la tortue s'oriente
 const TRACK_SMOOTH = 10;  // lissage du suivi de la fresque (plus petit = plus doux, plus de retard)
-const CATCH_DIST = 0.07;  // tolérance dans le plan de la fresque
-const CATCH_DEPTH = 0.07; // tolérance en profondeur
+const CATCH_DIST = 0.11;  // tolérance dans le plan de la fresque
+const CATCH_DEPTH = 0.09; // tolérance en profondeur
 const SPAWN_TIME = 1.8;
 const CATCH_TIME = 1.2;
 

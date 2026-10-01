@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 // Modèle « Water Molecule ball-and-stick model » par borkia sur Sketchfab,
 // licence CC-BY-SA 4.0 (crédit obligatoire). Sans ce fichier : gélule dessinée en code.
 const MODEL_URL = './models/molecule.glb';
-const SIZE = 0.045; // en largeurs de fresque
+const SIZE = 0.09; // en largeurs de fresque
 const HOVER_Z = 0.08;
 
 function haloTexture() {
@@ -83,7 +83,7 @@ export async function createGelule(color) {
       spinner.rotation.y += dt * (1.2 + excite * 10);
       spinner.rotation.x = Math.sin(t * 0.8) * 0.4;
       root.position.z = this.depth + Math.sin(t * 2) * 0.008 + excite * 0.12;
-      halo.scale.setScalar(0.075 + Math.sin(t * 3) * 0.01 + excite * 0.06);
+      halo.scale.setScalar(0.15 + Math.sin(t * 3) * 0.02 + excite * 0.12);
     },
   };
 }
