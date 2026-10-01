@@ -1,5 +1,6 @@
 // Étape 2/3 de la préparation du loriquet : carte des ailes (attribut _WING, 0 = corps, 1 = aile).
 // Étape 1 : npx obj2gltf -i models/originaux/12242_Australian_Rainbow_Lorikeet_v1_l3.obj -o lori-raw.glb
+//           (le .mtl et 12242_Australian_Rainbow_Lorikeet_diff.jpg doivent être à côté du .obj)
 // Usage : node outils/loriquet-ailes.mjs lori-raw.glb lori.glb apercus/ '{"x0":0.45,"x1":0.8,"u0":0.15,"u1":0.45,"tTip0":-32,"tTip1":-24,"tSh0":10,"tSh1":16}'
 // Dépendances : npm install @gltf-transform/core@4 @gltf-transform/extensions@4
 import { NodeIO } from '@gltf-transform/core';

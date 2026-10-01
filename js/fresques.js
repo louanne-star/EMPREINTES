@@ -88,8 +88,8 @@ export const FRESQUES = [
     speed: 0.36,
 
     personnage: {
-      // « Australian Rainbow Lorikeet » (fichier 12242), converti depuis l'OBJ par
-      // outils/preparer-loriquet.mjs : couleurs provisoires par zone + carte des ailes.
+      // « Australian Rainbow Lorikeet v1 » (Free3D), converti depuis l'OBJ avec sa texture,
+      // plus une carte des ailes (voir outils/loriquet-ailes.mjs).
       model: './models/loriquet.glb',
       length: 0.45,
       // Modèle « Z vers le haut », tête vers +Y, oiseau posé penché à 45°
