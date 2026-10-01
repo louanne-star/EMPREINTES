@@ -85,14 +85,14 @@ export const FRESQUES = [
     bounds: { x: 0.6, y: 0.5 },
     geluleZone: { x: 0.42, y: 0.36 },
     depth: [0.08, 0.45],
-    speed: 0.26,
+    speed: 0.36,
 
     personnage: {
       // « Love Birds Parrot » par Nyilonelycompany sur Sketchfab, licence CC-BY-NC 4.0
       // (crédit obligatoire, usage non commercial). Version allégée : 2 Mo au lieu de 51 Mo,
       // sans l'animation d'origine (oiseau posé) ; le vol est calculé en code (wings).
       model: './models/perroquet.glb',
-      length: 0.28,
+      length: 0.45,
       // Oiseau posé et penché : axe queue → tête = (0, 0.6, 0.8), dos = (0, 0.8, -0.6)
       rotation: [Math.PI, 0.927, -Math.PI / 2],
       tilt34: 0.3,
@@ -105,7 +105,7 @@ export const FRESQUES = [
         back: [0, 0.8, -0.6],
         spread: 1.35,                   // ailes déployées sur le côté
         amp: 0.6,                       // amplitude du battement
-        freq: 14,                       // vitesse du battement
+        freq: 20,                       // vitesse du battement
       },
     },
 
