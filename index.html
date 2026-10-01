@@ -58,8 +58,11 @@
           background: rgba(255, 255, 255, .22); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
           border: 1px solid rgba(255, 255, 255, .35); color: #fff; }
     .go svg { width: 26px; height: 26px; animation: monte 1.6s ease-in-out infinite; }
+    .go { touch-action: none; }
     .go span { width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center;
-               background: #fff; color: var(--noir); font-weight: 600; font-size: 1.15rem; }
+               background: #fff; color: var(--noir); font-weight: 600; font-size: 1.15rem;
+               transition: transform .25s ease-out; }
+    .go.glisse span { transition: none; }
     @keyframes monte { 50% { transform: translateY(-6px); opacity: .6; } }
 
     /* ---------- Écrans blancs (accueil, Atlas) ---------- */
@@ -200,7 +203,7 @@
   <section id="splash">
     <img src="./images/splash.jpg" alt="">
     <div class="splash-texte">
-      <p class="kicker">Festival Kaledoscope · UNC</p>
+      <p class="kicker">Lou-Anne G. &amp; Ondine T.</p>
       <h1>Explore la mémoire<br>du vivant</h1>
       <p class="sous">Une Empreinte à la fois</p>
     </div>

@@ -120,11 +120,39 @@ $('#atlas-list').addEventListener('click', (e) => {
   voix.jouer(getEmpreinte(btn.dataset.ecouter), () => { btn.textContent = ECOUTER; });
 });
 
-// Écran de bienvenue → accueil
-$('#splash-go').addEventListener('click', () => {
+// Écran de bienvenue → accueil : glisser le rond « Go » vers le haut (ou le toucher)
+function entrer() {
   $('#splash').hidden = true;
   $('#accueil').hidden = false;
-});
+}
+{
+  const go = $('#splash-go');
+  const rond = go.querySelector('span');
+  const COURSE = 70;          // distance max du rond vers le haut (px)
+  let depart = null;
+  let dy = 0;
+  go.addEventListener('pointerdown', (e) => {
+    depart = e.clientY;
+    dy = 0;
+    go.setPointerCapture(e.pointerId);
+    go.classList.add('glisse');
+  });
+  go.addEventListener('pointermove', (e) => {
+    if (depart === null) return;
+    dy = Math.max(-COURSE, Math.min(0, e.clientY - depart));
+    rond.style.transform = `translateY(${dy}px)`;
+  });
+  const lacher = () => {
+    if (depart === null) return;
+    depart = null;
+    go.classList.remove('glisse');
+    // Glissé assez haut, ou simple toucher : on entre
+    if (dy < -COURSE * 0.6 || Math.abs(dy) < 4) entrer();
+    else rond.style.transform = '';
+  };
+  go.addEventListener('pointerup', lacher);
+  go.addEventListener('pointercancel', () => { depart = null; go.classList.remove('glisse'); rond.style.transform = ''; });
+}
 
 $('#accueil-atlas').addEventListener('click', openAtlas);
 
