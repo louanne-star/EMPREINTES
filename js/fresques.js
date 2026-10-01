@@ -85,16 +85,20 @@ export const FRESQUES = [
     bounds: { x: 0.6, y: 0.5 },
     geluleZone: { x: 0.42, y: 0.36 },
     depth: [0.08, 0.45],
-    speed: 0.36,
+    speed: 0.26,
+    accel: 1.8,                         // plus d'inertie : vol plus coulé
+    turn: 2.5,                          // virages plus larges
+    depthWave: 4,                       // va-et-vient vers le visiteur plus lents
 
     personnage: {
       // Loriquet généré avec Meshy AI, animé dans Blender (outils/loriquet-animer.py)
       model: './models/loriquet.glb',
-      length: 0.5,                      // envergure, en largeurs de fresque
+      length: 0.32,                     // envergure, en largeurs de fresque
       rotation: [Math.PI / 2, Math.PI / 2, 0],
-      tilt34: 0.75,                     // vue de 3/4 : on voit son flanc, comme le loriquet peint
+      upright: true,                    // dos vers le ciel : vu de profil, de 3/4, de face ou de dos
+      tilt34: 0,
       pitch: 0.3,                       // le modèle a la tête relevée : on la ramène à l'horizontale
-      bob: 0.02,
+      bob: 0.012,
       clip: /vol/,
       animSpeed: 1,                     // vitesse du battement (1 = 2 battements par seconde)
     },

@@ -24,6 +24,14 @@ export function createGame(cfg, mindarThree, { controls, onCaught }) {
   const empreinte = getEmpreinte(cfg.empreinte);
   const anchor = mindarThree.addAnchor(cfg.targetIndex);
   const [zMin, zMax] = cfg.depth;
+  // Réglages propres à la fresque, sinon valeurs communes
+  const accel = cfg.accel ?? ACCEL;
+  const turnSpeed = cfg.turn ?? TURN;
+  const depthWave = cfg.depthWave ?? DEPTH_WAVE;
+  // Personnage « debout » (oiseau) : le dos reste vers le ciel et il pivote sur lui-même,
+  // on le voit de profil, de face (il vient vers nous) ou de dos (il s'éloigne).
+  // Sinon (tortue, papillon) : le dos face à la caméra, il tourne dans le plan du mur.
+  const upright = !!cfg.personnage.upright;
 
   // La partie vit dans `world`, qui suit en douceur la fresque tant qu'elle est
   // visible, puis reste figé à l'écran quand on la perd : on peut continuer à jouer
@@ -42,7 +50,7 @@ export function createGame(cfg, mindarThree, { controls, onCaught }) {
   const pos = new THREE.Vector2();
   const vel = new THREE.Vector2();
   const input = new THREE.Vector2();
-  let heading = 0;
+  let heading = 0; // direction : dans le plan du mur, ou autour de la verticale si upright
   let depthPhase = 0; // 0 = contre le mur (zMin), π = au plus près du visiteur (zMax)
   let depth = zMin;
   let state = 'idle';
@@ -99,32 +107,48 @@ export function createGame(cfg, mindarThree, { controls, onCaught }) {
     gelule.root.visible = true;
   }
 
+  // upright : heading 0 = vers la droite, π/2 = vers le visiteur, -π/2 = vers le mur
+  function orient(spin = 0) {
+    if (upright) perso.root.rotation.set(-Math.PI / 2, -(heading + spin), 0, 'YXZ');
+    else perso.root.rotation.set(0, 0, heading + spin, 'XYZ');
+  }
+
+  function steer(dt, dx, dy) {
+    let diff = Math.atan2(dy, dx) - heading;
+    diff = Math.atan2(Math.sin(diff), Math.cos(diff));
+    const step = diff * damp(dt, turnSpeed);
+    heading += step;
+    return step / dt;
+  }
+
   function move(dt, active) {
     controls.read(input).multiplyScalar(active ? cfg.speed : 0);
-    vel.lerp(input, damp(dt, ACCEL));
+    vel.lerp(input, damp(dt, accel));
     pos.addScaledVector(vel, dt);
 
     // Bords : on bloque la position et on annule la vitesse vers l'extérieur
     if (Math.abs(pos.x) > cfg.bounds.x) { pos.x = Math.sign(pos.x) * cfg.bounds.x; vel.x = 0; }
     if (Math.abs(pos.y) > cfg.bounds.y) { pos.y = Math.sign(pos.y) * cfg.bounds.y; vel.y = 0; }
 
-    let turn = 0;
-    if (vel.lengthSq() > 1e-4) {
-      let diff = Math.atan2(vel.y, vel.x) - heading;
-      diff = Math.atan2(Math.sin(diff), Math.cos(diff));
-      const step = diff * damp(dt, TURN);
-      heading += step;
-      turn = step / dt;
-    }
-
     // Vagues en profondeur : avancent avec la distance parcourue
-    depthPhase += vel.length() * dt * DEPTH_WAVE;
+    depthPhase += vel.length() * dt * depthWave;
     const newDepth = zMin + (zMax - zMin) * (0.5 - 0.5 * Math.cos(depthPhase));
-    const climb = (newDepth - depth) / dt / cfg.speed; // > 0 quand il vient vers le visiteur
+    const vz = (newDepth - depth) / dt; // > 0 quand il vient vers le visiteur
     depth = newDepth;
 
+    let turn = 0;
+    let climb;
+    if (upright) {
+      // S'oriente selon son déplacement horizontal et en profondeur ; pique ou monte selon y
+      if (Math.hypot(vel.x, vz) > 0.03) turn = steer(dt, vel.x, vz);
+      climb = vel.y / cfg.speed;
+    } else {
+      if (vel.lengthSq() > 1e-4) turn = steer(dt, vel.x, vel.y);
+      climb = vz / cfg.speed;
+    }
+
     perso.root.position.set(pos.x, pos.y, depth);
-    perso.root.rotation.z = heading;
+    orient();
     return { turn, climb };
   }
 
@@ -177,7 +201,7 @@ export function createGame(cfg, mindarThree, { controls, onCaught }) {
         const p = Math.min(stateTime / SPAWN_TIME, 1);
         root.scale.setScalar(Math.max(easeOutBack(p), 0));
         root.position.set(pos.x, pos.y, depth * easeOut(p));
-        root.rotation.z = heading + (1 - easeOut(p)) * Math.PI * 2;
+        orient((1 - easeOut(p)) * Math.PI * 2);
         turn = -(1 - p) * 4; // il penche dans sa vrille
         if (p === 1) {
           controls.show();

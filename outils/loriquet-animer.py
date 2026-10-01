@@ -52,6 +52,14 @@ bpy.ops.object.mode_set(mode='OBJECT')
 act = arm.animation_data.action
 act.name = 'vol'
 
+# Maillage allégé pour le téléphone (50 000 → ~12 000 sommets), avant le squelette
+dec = mesh.modifiers.new('allege', 'DECIMATE')
+dec.ratio = 0.25
+mesh.modifiers.move(mesh.modifiers.find(dec.name), 0)
+bpy.context.view_layer.objects.active = mesh
+bpy.ops.object.modifier_apply(modifier=dec.name)
+print('SOMMETS', len(mesh.data.vertices))
+
 # Textures : 2048 → 1024 pour le téléphone
 for img in bpy.data.images:
     if img.size[0] > 1024:
