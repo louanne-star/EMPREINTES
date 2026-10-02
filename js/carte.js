@@ -37,18 +37,18 @@ export function afficherCarte(el, listeEl) {
   });
   carte.fitBounds(L.latLngBounds(fresques.map((e) => e.gps)), { padding: [40, 40], maxZoom: 18 });
 
-  // Liste sous la carte : toucher une ligne centre la carte sur la fresque
+  // Liste sous la carte : toucher une ligne (ou sa flèche) zoome sur la fresque.
+  // L'itinéraire reste disponible dans la bulle du point.
   listeEl.innerHTML = fresques.map((e, i) => `
     <li class="lieu-ligne" data-i="${i}">
       <span class="repere-mini">${i + 1}</span>
       <img src="${e.vignette}" alt="">
       <div><strong>${e.fresque}</strong><span>${e.lieu}</span></div>
-      <a class="rond noir petit-rond" href="${itineraire(e.gps)}" target="_blank" rel="noopener" aria-label="Itinéraire vers ${e.fresque}">
+      <button class="rond noir petit-rond" aria-label="Voir ${e.fresque} sur la carte">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
-      </a>
+      </button>
     </li>`).join('');
   listeEl.addEventListener('click', (ev) => {
-    if (ev.target.closest('a')) return;
     const li = ev.target.closest('[data-i]');
     if (!li) return;
     const m = marqueurs[+li.dataset.i];
